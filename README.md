@@ -16,5 +16,5 @@ The application is created using [Flask](https://flask.palletsprojects.com/en/2.
 - [Terminal theme](http://0harshit0.pythonanywhere.com/):zany_face:
 - [Normal theme (GUI)](http://0harshit0.pythonanywhere.com/GUI):stuck_out_tongue_winking_eye:
 ## Learn more about it's use:
-- Web Application [Wiki](https://github.com/0-harshit-0/Cryptic-Steganography/wiki#get-started-with-the-web-version)
-- Python script [Wiki](https://github.com/0-harshit-0/Cryptic-Steganography/wiki#get-started-with-the-script-on-your-terminal)
+- Web Application [Wiki](https://github.com/0-harshit-0/Cryptic-ImageSteganography/wiki#get-started-with-the-web-version)
+- Python script [Wiki](https://github.com/0-harshit-0/Cryptic-ImageSteganography/wiki#get-started-with-the-script-on-your-terminal)
