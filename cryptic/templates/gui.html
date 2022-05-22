@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Cryptic | GUI</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="static/assets/crypt-removebg.png" />
+  <link rel="canonical" href="" />
+  <meta
+    name="description"
+    content="Image steganography tool."
+  />
+  <meta name="robots" content="index,follow" />
+  <!-- meta finish -->
+
+	<!-- <link rel="stylesheet" type="text/css" href="static/styles/style.css">
+	<link rel="stylesheet" href="static/styles/mstyle.css" media="only screen and (max-width: 600px)"> -->
+
+<!--	<script type="text/javascript" src="static/src/bg.js" defer="true"></script>
+	<script type="text/javascript" src="static/src/components.js" defer="true"></script>
+	<script type="text/javascript" src="static/src/script.js" defer="true"></script> -->
+	<script type="text/javascript" src="static/src/standardPX.js" defer></script>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+	<header class="headingCont">
+		<h1>CRYPTIC | GUI</h1>
+		<svg onclick="location.assign('/');" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
+		  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+		  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+		</svg>
+	</header>
+	<br>
+	<br>
+	<div class="wrap">
+		<section>
+			<fieldset>
+				<legend><strong>Encode / Hide</strong></legend>
+				<label for="hidefile">
+					file:
+					<input type="file" name="hfile" id="hidefile">
+				</label>
+				<label for="image">
+					image:
+					<input type="file" name="image" id="image">
+				</label>
+				<button class="bi" onclick="hide();">Hide</button>
+				<span class="reqsize"></span>
+			</fieldset>
+			<br>
+			<fieldset>
+				<legend><strong>Decode / Unhide</strong></legend>
+				<label for="imaged">
+					image:
+					<input type="file" name="image" id="imaged">
+				</label>
+				<button class="bi" onclick="unnhide();">Unhide</button>
+			</fieldset>
+		</section>
+	</div>
+
+	<footer>
+		<section>
+			<h5>
+				CRYPTIC | IMAGE STEGANOGRAPHY
+			</h5>
+		</section>
+		<section class="contact">
+			<a target="_blank" href="https://github.com/0-harshit-0">Github</a>
+			<a target="_blank" href="https://www.linkedin.com/in/0-hs-0/">LinkedIn</a>
+		</section>
+	</footer>
+	<style type="text/css">
+		* {
+			font-family: 'Roboto', sans-serif;
+		}
+		.bi {
+			cursor: pointer;
+		}
+		body {
+			margin: 0;
+			padding-inline: 5%;
+		}
+		.headingCont {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		fieldset{
+			padding-inline: 16px;
+			padding-block: 16px;
+		}
+		legend {
+			font-size: 18px;
+		}
+		button {/*
+			margin-inline-start: auto;*/
+		}
+		footer {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			font-weight: bold;
+			position: absolute;
+			top: 90%;
+			width: calc(100% - 11%);
+		}
+		a {
+			text-decoration: none;
+		}
+		.contact {
+			display: flex;
+			justify-content: end;
+			column-gap: 10%;
+			width: 20%;
+		}
+	</style>
+	<script type="text/javascript">
+		let hideFiles = document.querySelector("#hidefile");
+		let imageFile = document.querySelector("#image");
+		let imageFiled = document.querySelector("#imaged");
+		let reqS = document.querySelector(".reqsize");
+
+		hideFiles.addEventListener("change", (e)=>{
+			reqS.innerText = `\nrequired image of dimension ${find(e.target.files[0].size)} or above`;
+		});
+
+		let hide = async () => {
+			let formData = new FormData();
+			formData.append('hide', hideFiles.files[0]);
+			formData.append('img', imageFile.files[0]);
+			hideFiles.value = '', imageFile.value = '';
+
+			let res = await fetch("/hide", {
+				method: 'post',
+				headers: {
+					//'Content-Type': 'application/json'
+					'enctype': "multipart/form-data"
+				},
+				body: formData
+			});
+
+			if(res.status == 404) return 0;
+			let json = await res.blob();
+			res = await fetch("/hide");
+
+			const imageObjectURL = URL.createObjectURL(json);
+			let a = document.createElement('a');
+			a.setAttribute("download", "hidden.png");
+			a.setAttribute("href", imageObjectURL);
+			a.click();
+			a.remove();
+		}
+
+		let unnhide = async ()=> {
+			let formData = new FormData();
+			formData.append('img', imageFiled.files[0]);
+			imageFiled.value = '';
+
+			let res = await fetch("/unhide", {
+				method: 'post',
+				headers: {
+					//'Content-Type': 'application/json'
+					'enctype': "multipart/form-data"
+				},
+				body: formData
+			});
+			if(res.status == 404) return 0;
+
+			let json = await res.blob();
+			res = await fetch("/unhide");
+			let ext = await res.text();
+
+			const imageObjectURL = URL.createObjectURL(json);
+			let a = document.createElement('a');
+			a.setAttribute("download", "decoded"+ext);
+			a.setAttribute("href", imageObjectURL);
+			a.click();
+			a.remove();
+		}
+	</script>
+</body>
+</html>

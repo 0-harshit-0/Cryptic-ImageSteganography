@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Cryptic</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="static/assets/crypt-removebg.png" />
+  <link rel="canonical" href="" />
+  <meta
+    name="description"
+    content="Image steganography tool."
+  />
+  <meta name="robots" content="index,follow" />
+  <!-- meta finish -->
+
+	<link rel="stylesheet" type="text/css" href="static/styles/style.css">
+	<link rel="stylesheet" href="static/styles/mstyle.css" media="only screen and (max-width: 600px)">
+
+	<script type="text/javascript" src="static/src/standardPX.js"></script>
+	<script type="text/javascript" src="static/src/bg.js" defer="true"></script>
+	<script type="text/javascript" src="static/src/components.js" defer="true"></script>
+	<script type="text/javascript" src="static/src/script.js" defer="true"></script>
+</head>
+<body>
+
+	<div id="startScreen">
+		<span class="notActive">start server</span>
+		<svg class="blink" width="7" height="70" viewBox="0 0 7 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<rect width="7" height="58" fill="white"></rect>
+		</svg>
+	</div>
+	<canvas id="canvas"></canvas>
+
+	<!-- main content -->
+
+	<!-- 
+	\n\n
+	## Shortcuts:\n
+	> Shift+Enter to create a new line.\n
+	> Alt+n or Alt+N to create a new terminal.\n
+	> Ctrl+c to close the terminal.\n
+	> Use a mouse to hold and drag the terminal.\n\n
+	## Flags:\n
+	> -h  for help.\n
+	> -e to hide files in an image.\n
+	> -d to reveal the hidden files from an image.\n\n
+	## Hide files with: cryptic -e\n
+	> Once the hiding process is complete, a new Image file will start downloading automatically.\n\n
+	## Reveal hidden files with: cryptic -d\n
+	> After decoding the files, downloaded will begin automatically.\n\n
+	## Close terminal: exit\n\n## Help message: cryptic -h\n
+	 -->
+
+	<div class="bottomCont"></div>
+
+	<!-- hidden elements -->
+	<input type="file" name="hfile" id="hidefile">
+	<input type="file" name="image" id="image">
+	<canvas id="encodedCan"></canvas>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+.terminalCont{
+	grid-template-rows: .05fr 1fr;
+	width: 90%;
+	height: 100%;
+	top: 0;
+	left: calc(50% - 45%);
+}
+.terminalHeadBarBtnCont svg {
+	display: none;
+}
+.bottomCont{
+	display: none;
+}
