@@ -34,13 +34,13 @@ let bgctx = bgcanvas.getContext('2d');
 
 let s = new Shapes(bgctx), timeout = false;
 let animateInter, store = new Array(), index = 0;
-
+let scale = 1;
 
 
 function changeDimensions(callback) {
 	bgctx.clearRect(0, 0, bgcanvas.width, bgcanvas.height);
-	bgcanvas.width = window.innerWidth;
-	bgcanvas.height = window.innerHeight;
+	bgcanvas.width = window.innerWidth*scale;
+	bgcanvas.height = window.innerHeight*scale;
 
 	if(callback) callback(true);
 }
@@ -86,7 +86,7 @@ let starStore = new Array();
 function animatio() {
   //bgctx.fillStyle = 'rgba(0, 0, 0, 1)';
   //bgctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-  bgctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  bgctx.clearRect(0, 0, bgcanvas.width, bgcanvas.height);
 
 
   for (let k = starStore.length-1; k >= 0; k--) {
