@@ -93,12 +93,19 @@ class Terminal {
 		});
 	}
 	commandInput(input='') {
-		this.div.querySelector(`.terminal`).innerHTML += `<label for="rootatkali"></label><textarea id="rootatkali" class="commandName"></textarea>`;
-		let fullNameEle = [...this.div.querySelector(`.terminal`).querySelectorAll(`.commandName`)].pop();
-		fullNameEle.value = `root@${this.n.toLowerCase()}:~# ${input}`;
-		setTimeout(()=>{fullNameEle.focus();}, 100);
-		fullNameEle.addEventListener('input', ()=> {
-			fullNameEle.style.height = (fullNameEle.scrollHeight)+"px";
+		this.div.querySelector(`.terminal`).innerHTML += `<label></label><textarea class="commandName"></textarea>`;
+		
+		let commandTextareaList = [...this.div.querySelector(`.terminal`).querySelectorAll(`.commandName`)];
+		let newCommandTextarea = commandTextareaList.pop();
+		newCommandTextarea.value = `root@${this.n.toLowerCase()}:~# ${input}`;
+		
+		setTimeout(()=>{newCommandTextarea.focus();}, 100);
+		if (commandTextareaList.length) {
+			commandTextareaList[commandTextareaList.length-1].disabled = true;
+		}
+		
+		newCommandTextarea.addEventListener('input', ()=> {
+			newCommandTextarea.style.height = (newCommandTextarea.scrollHeight)+"px";
 		});
 	}
 	input(file, img) {
@@ -149,6 +156,7 @@ class Terminal {
 						
 						iele.innerHTML = iele.value;
 						iele.style.height = (iele.scrollHeight)+"px";
+
 						//create new command input element
 						this.commandInput();
 						break;
@@ -206,6 +214,7 @@ class Terminal {
 						
 						iele.innerHTML = iele.value;
 						iele.style.height = (iele.scrollHeight)+"px";
+
 						//create new command input element
 						this.commandInput();
 						break;
@@ -243,7 +252,7 @@ class Terminal {
 		<div class="terminal">
 		</div>
 		`;
-		document.querySelector("body").append(this.div);
+		document.querySelector("#root").append(this.div);
 	
 		//activate the current window----
 		this.div.classList.add('activeTerminalCont');

@@ -5,121 +5,99 @@ let txt = "cryptic", i=0;
 let typesound = new Audio();
 typesound.src="static/assets/typeaudio.mp3";
 
-ssTxt.onclick =()=>{
+ssTxt.onclick = () =>{
 	//getDimensions(mandel);
 	ssTxt.classList.remove("notActive");
 	blink.style.display = 'initial';
 	ssTxt.innerText = '';
+
 	typesound.play();
+
 	inter = setInterval(()=> {
 		if(!txt.charAt(i)) {clearInterval(inter);return 1;}
 		ssTxt.innerText += txt.charAt(i);
 		i++;
 	}, 150);
+
 	setTimeout(()=>{
 		ss.remove();
 	}, 1500);
 }
 
 
-/*
----------------------cnavas---------------------------
+
+//---------------------cnavas---------------------------
 
 
 let bgcanvas = document.querySelector('#canvas');
 let bgctx = bgcanvas.getContext('2d');
+
 let s = new Shapes(bgctx), timeout = false;
-let wh = Math.max(innerWidth, innerHeight);
-bgcanvas.width = wh;
-bgcanvas.height = wh;
-function getDimensions(callback) {
-	s.clear(new Vector2D(), bgcanvas.width, bgcanvas.height);
-	bgcanvas.width = wh;
-	bgcanvas.height = wh;
+let animateInter, store = new Array(), index = 0;
+
+
+
+function changeDimensions(callback) {
+	bgctx.clearRect(0, 0, bgcanvas.width, bgcanvas.height);
+	bgcanvas.width = window.innerWidth;
+	bgcanvas.height = window.innerHeight;
 
 	if(callback) callback(true);
 }
 addEventListener('resize', function(e) {
 	clearTimeout(timeout);
+
 	timeout = setTimeout(()=> {
-		cancelAnimationFrame(id);
-		getDimensions(animate);
+		cancelAnimationFrame(animateInter);
+		changeDimensions(animatio);
 	}, 500);
 });
-// bgcanvas responssive comp------------
-function hexToRgb(hex) {
-  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-    return r + r + g + g + b + b;
-  });
+// bgcanvas responssive over------------
 
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
+class Stars {
+  constructor(x, y, vx, vy, radius) {
+    this.pos = new Vector2D(x, y);
+    this.vel = new Vector2D(vx, vy);
+    this.r = radius;
+    this.color = "rgb(255, 255, 255)";
+  }
+  draw() {
+    s.ellipse("",this.pos.x, this.pos.y, this.r);
+    s.fill("", this.color);
+  }
+  update() {
+    this.pos = Vector2D.add(this.pos, this.vel);
+    this.draw();
+  }
 }
-let a, b, n=0;
-const maxiterations = 50;
-const magnify = 4;
-function mandel(tri=false) {
-	if (tri) {
-		mt=true;
-		m=false;
-	}else {
-		mt=false;
-		m=true;
-	}
-	c=false;
-	t=false;
-	bgctx.clearRect(0,0,bgcanvas.width, bgcanvas.height);
 
-	for (var x = 0; x < wh; x += 1) {
-		for (var y = 0; y < wh; y += 1) {
-			
-			a = Vector2D.map(x, 0, wh, -magnify, magnify);
-			b = Vector2D.map(y, 0, wh, -magnify, magnify);
-			n = 0;
-			if (a && b) {
-				var ca = a;//x
-				var cb = b;//y
+let starStore = new Array();
+(() => {
+  for (let i = 0; i < 1000; i++) {
+    let radius = Math.random();
+    let x = Math.random() * (innerWidth - radius * 2);
+    let y = Math.random() * (innerHeight - radius * 2);
+    let dx = (Math.random() - 0.5) / 5;
+    let dy = (Math.random() - 0.5) / 5;
+    starStore.push(new Stars(x, y, dx, dy, radius));
+  }
+})();
 
-				while(n < maxiterations && Math.sqrt(a*a + b*b) <= 15) {
-					//console.log(1)
-					
-					if (tri) {
-						let aa = a*a - b*b;
-						let bb = -2*a*b;
-						a = aa + ca;
-						b = bb + cb;
-					}else {
-						let aa = a*a - b*b;
-						let bb = 2*a*b;
-						a = aa + ca;
-						b = bb + cb;
-					}
-									
-			        n++;
-				}
-				fc = hexToRgb('#232121');
-	      		if (n == maxiterations) {
-			        fill = `transparent`;
-			        
-			    }else if (n < maxiterations) {
-			    	fill = `rgb(${fc.r+(n*10)},${fc.g+(n*10)},${fc.b+(n*10)})`;
-			    }
+function animatio() {
+  //bgctx.fillStyle = 'rgba(0, 0, 0, 1)';
+  //bgctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+  bgctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-	            s.rect({x:x, y:y, w:1});
-	            s.fill({c:fill});
-	            //console.log(fill)
-	        }
-		}
-	}
+
+  for (let k = starStore.length-1; k >= 0; k--) {
+    starStore[k].update();
+    if (starStore[k].pos.y >= bgcanvas.height || starStore[k].pos.y < 0 ||
+        starStore[k].pos.x >= bgcanvas.width || starStore[k].pos.x <= 0) {
+      starStore.splice(k, 1);
+    }
+  }
+
+  requestAnimationFrame(animatio);
 }
-let animateInter;
-let store = new Array(), index = 0;
 
-
-*/
+changeDimensions(animatio);
