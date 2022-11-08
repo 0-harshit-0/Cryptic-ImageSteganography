@@ -4,22 +4,23 @@ import steg
 import os
 
 app = Flask(__name__)
-
+# don't copy paste it on pythonanywhere, because the upload folder path is diff
 
 
 @app.route("/")
 def homepage():
-    url_for('static', filename='assets/typeaudio.mp3')
-    url_for('static', filename='styles/style.css')
-    url_for('static', filename='styles/mystyle.css')
-    url_for('static', filename='src/script.js')
-    url_for('static', filename='src/standardPX.js')
-    url_for('static', filename='src/bg.js')
     return render_template('index.html')
 
 @app.route("/GUI" or "/gui")
 def grphicalInterface():
     return render_template('gui.html')
+
+@app.route("/static/serviceworker.js")
+def sw():
+    response=make_response(send_from_directory('static', 'serviceworker.js'))
+    #change the content header file. Can also omit; flask will handle correctly.
+    response.headers['Service-Worker-Allowed'] = '/'
+    return response
 
 @app.route("/hide", methods=["POST", "GET"])
 def hidepage():

@@ -5,21 +5,19 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="static/assets/crypt-removebg.png" />
-  <link rel="canonical" href="" />
   <meta
     name="description"
-    content="Image steganography tool."
+    content="Image steganography tool. Hide any file or text message in images."
   />
   <meta name="robots" content="index,follow" />
   <!-- meta finish -->
 
-	<!-- <link rel="stylesheet" type="text/css" href="static/styles/style.css">
-	<link rel="stylesheet" href="static/styles/mstyle.css" media="only screen and (max-width: 600px)"> -->
+  <link rel="icon" href="static/assets/icon-16.png" />
+  <link rel="canonical" href="" />
 
-<!--	<script type="text/javascript" src="static/src/bg.js" defer="true"></script>
-	<script type="text/javascript" src="static/src/components.js" defer="true"></script>
-	<script type="text/javascript" src="static/src/script.js" defer="true"></script> -->
+	<!-- pwa manifest linking -->
+  <link rel="manifest" href="static/app.webmanifest">
+
 	<script type="text/javascript" src="static/src/standardPX.js" defer></script>
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -151,6 +149,10 @@
 		}
 	</style>
 	<script type="text/javascript">
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register("static/serviceworker.js", { scope: "/" })
+		}
+
 		let hideFiles = document.querySelector("#hidefile");
 		let imageFile = document.querySelector("#image");
 		let imageFiled = document.querySelector("#imaged");

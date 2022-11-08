@@ -135,9 +135,13 @@ class Terminal {
 				this.historyCommand.unshift(command.join(' '));
 				//command filter---------
 				temp = command.shift();
-				if(temp == 'exit'){
+				if (temp == 'exit') {
 					this.div.remove();
 					this.section.remove();
+				}
+				if (temp == "gui") {
+					window.location.assign("/GUI");
+					return 1;
 				}
 				if(temp != 'Cryptic' && temp != 'cryptic') {
 					iele.value += ("\ninvalid command");
@@ -152,7 +156,7 @@ class Terminal {
 				temp = command.shift();
 				switch (temp) {
 					case '-h':
-						iele.value += `\n\n## Shortcuts:\n> Shift+Enter to create a new line.\n> Alt+n or Alt+N to create a new terminal.\n> Alt+c to close the terminal.\n> Use a mouse to hold and drag the terminal.\n\n## Flags:\n> -h  for help.\n> -e to hide files in an image.\n> -em to hide text message in an image.\n> -d to reveal the hidden files/messages from an image.\n\n## Hide files with: cryptic -e\n> Once the hiding process is complete, a new Image file will start downloading automatically.\n\n## Hide messages with: cryptic -em [text message here]\n> Once the hiding process is complete, a new Image file will start downloading automatically.\n\n## Reveal hidden files with: cryptic -d\n> After decoding the files, downloaded will begin automatically.\n\n## Close terminal: exit\n\n## Help message: cryptic -h\n`;
+						iele.value += `\n\n## Shortcuts:\n> Shift+Enter to create a new line.\n> Alt+n or Alt+N to create a new terminal.\n> Alt+c to close the terminal.\n> Use a mouse to hold and drag the terminal.\n\n## Misc:\n> gui to use basic theme.\n\n## Flags:\n> -h  for help.\n> -e to hide files in an image.\n> -em to hide text message in an image.\n> -d to reveal the hidden files/messages from an image.\n\n## Hide files with: cryptic -e\n> Once the hiding process is complete, a new Image file will start downloading automatically.\n\n## Hide messages with: cryptic -em [text message here]\n> Once the hiding process is complete, a new Image file will start downloading automatically.\n\n## Reveal hidden files with: cryptic -d\n> After decoding the files, downloaded will begin automatically.\n\n## Close terminal: exit\n\n## Help message: cryptic -h\n`;
 						
 						iele.innerHTML = iele.value;
 						iele.style.height = (iele.scrollHeight)+"px";

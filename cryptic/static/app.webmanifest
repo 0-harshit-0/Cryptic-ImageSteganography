@@ -1,0 +1,16 @@
+{
+  "name": "Cryptic | Image Steganogrphy",
+  "short_name": "Cryptic",
+  "description": "Image steganography tool. Hide any file or text message in images.",
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

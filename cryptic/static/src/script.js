@@ -1,3 +1,7 @@
+if ('serviceWorker' in navigator) {
+   navigator.serviceWorker.register("static/serviceworker.js");
+}
+
 let boxCount = 0, animateStore = new Array();
 let imageFile = document.querySelector('#image');
 let hideFiles = document.querySelector('#hidefile');
