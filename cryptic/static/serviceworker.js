@@ -1,6 +1,7 @@
 console.log("registered")
 
 self.addEventListener('fetch', function(event) {
+	//console.log(event)
 	event.respondWith(async function() {
 		try{
 			var res = await fetch(event.request);

@@ -9,14 +9,17 @@
     name="description"
     content="Image steganography tool. Hide any file or text message in images."
   />
+  <meta name="theme-color" content="#000">
   <meta name="robots" content="index,follow" />
   <!-- meta finish -->
 
   <link rel="icon" href="static/assets/icon-16.png" />
   <link rel="canonical" href="" />
+  <!-- link(website decoration) finish -->
 
-	<!-- pwa manifest linking -->
+	<!-- pwa manifest linking and icon (ios workaruond) -->
   <link rel="manifest" href="static/app.webmanifest">
+  <link rel="apple-touch-icon" href="static/assets/icon-512.png">
 
 	<script type="text/javascript" src="static/src/standardPX.js" defer></script>
 
@@ -38,30 +41,37 @@
 	</header>
 
 	<div class="wrap">
-		<section>
-			<fieldset>
-				<legend><strong>Encode / Hide</strong></legend>
-				<label for="hidefile">
-					file:
-					<input type="file" name="hfile" id="hidefile">
-				</label>
-				<label for="image">
-					image:
-					<input type="file" name="image" id="image">
-				</label>
-				<button class="bi" onclick="hide();">Hide</button>
-				<span class="reqsize"></span>
-			</fieldset>
-			<br>
-			<fieldset>
-				<legend><strong>Decode / Unhide</strong></legend>
-				<label for="imaged">
-					image:
-					<input type="file" name="image" id="imaged">
-				</label>
-				<button class="bi" onclick="unnhide();">Unhide</button>
-			</fieldset>
-		</section>
+		<fieldset>
+			<legend><strong>Encode / Hide</strong></legend>
+
+			<label for="hidefile">
+				file:
+				<input type="file" name="hfile" id="hidefile">
+			</label>
+
+			<label for="image">
+				image:
+				<input type="file" name="image" id="image">
+			</label>
+
+			<button class="bi" onclick="hide();">Hide</button>
+
+			<span class="reqsize"></span>
+		</fieldset>
+
+		<br />
+
+		<fieldset>
+			<legend><strong>Decode / Unhide</strong></legend>
+
+			<label for="imaged">
+				image:
+				<input type="file" name="image" id="imaged">
+			</label>
+
+			<button class="bi" onclick="unnhide();">Unhide</button>
+
+		</fieldset>
 	</div>
 
 	<footer>
@@ -87,6 +97,7 @@
 
 		.bi {
 			cursor: pointer;
+			margin-block: 10px;
 		}
 		body {
 			margin: 0;
@@ -109,6 +120,9 @@
 			margin-block-start: 3%;
 			height: 30%;
 		}
+		.wrap > section {
+			height: 100%;
+		}
 		fieldset{
 			padding-inline: 16px;
 			padding-block: 16px;
@@ -116,10 +130,9 @@
 		legend {
 			font-size: 18px;
 		}
-		button {/*
-			margin-inline-start: auto;*/
+		input {
+			margin-block-start: 10px;
 		}
-
 
 		footer {
 			position: relative;

@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "Cryptic | Image Steganogrphy",
   "short_name": "Cryptic",
   "description": "Image steganography tool. Hide any file or text message in images.",
@@ -6,11 +7,19 @@
   "display": "standalone",
   "scope": "/",
   "lang": "en",
+  "theme_color": "black",
+  "background_color": "black",
   "icons": [
     {
       "src": "assets/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

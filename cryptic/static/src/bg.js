@@ -100,4 +100,6 @@ function animatio() {
   requestAnimationFrame(animatio);
 }
 
-changeDimensions(animatio);
+window.onload = () => {
+  setTimeout(()=>{changeDimensions(animatio);}, 2000);
+}

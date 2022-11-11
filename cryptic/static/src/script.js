@@ -1,5 +1,5 @@
 if ('serviceWorker' in navigator) {
-   navigator.serviceWorker.register("static/serviceworker.js");
+   navigator.serviceWorker.register("static/serviceworker.js", { scope: "/" });
 }
 
 let boxCount = 0, animateStore = new Array();
@@ -9,7 +9,10 @@ let encoding = false, encodemsg= false;
 let createdImageFile;
 
 window.onload = () => {
-	new Terminal(`Cryptic_${boxCount++}`).drawMiniBox();
+	setTimeout(()=> {
+		new Terminal(`Cryptic_${boxCount++}`).drawMiniBox();
+		
+	}, 1000);
 }
 /* ---------------key short cuts---------------- */
 addEventListener('keydown', (e)=>{

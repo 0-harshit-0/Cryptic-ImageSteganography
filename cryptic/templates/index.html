@@ -9,24 +9,27 @@
     name="description"
     content="Image steganography tool. Hide any file or text message in images."
   />
+  <meta name="theme-color" content="#000">
   <meta name="robots" content="index,follow" />
   <!-- meta finish -->
 
   <link rel="icon" href="static/assets/icon-16.png" />
   <link rel="canonical" href="" />
 
-  <!-- pwa manifest linking -->
+  <!-- pwa manifest linking and icon (ios workaruond) -->
   <link rel="manifest" href="static/app.webmanifest">
+  <link rel="apple-touch-icon" href="static/assets/icon-512.png">
 
-  <!-- style sheets -->
-	<link rel="stylesheet" type="text/css" href="static/styles/style.css">
+  <!-- style sheets, async load main style -->
+	<link rel="preload" href="static/styles/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+	<noscript><link rel="stylesheet" href="static/styles/style.css"></noscript>
 	<link rel="stylesheet" href="static/styles/mstyle.css" media="only screen and (max-width: 600px)">
 
 	<!-- external libs. -->
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/0-harshit-0/Utility-HTML5Canvas@master/src/shapes.js"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/0-harshit-0/Utility-HTML5Canvas@master/src/vector.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/0-harshit-0/Utility-HTML5Canvas@master/src/shapes.js"  defer="true"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/0-harshit-0/Utility-HTML5Canvas@master/src/vector.js"  defer="true"></script>
 
-	<script type="text/javascript" src="static/src/standardPX.js"></script>
+	<script type="text/javascript" src="static/src/standardPX.js" defer="true"></script>
 	<script type="text/javascript" src="static/src/bg.js" defer="true"></script>
 	<script type="text/javascript" src="static/src/components.js" defer="true"></script>
 	<script type="text/javascript" src="static/src/script.js" defer="true"></script>
