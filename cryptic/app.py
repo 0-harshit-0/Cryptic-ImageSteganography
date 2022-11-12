@@ -28,30 +28,34 @@ def hidepage():
         print("hide")
         hidefile = request.files["hide"] #get the file to hide
         imgfile = request.files["img"]  #get the image file to hide into
-        #print(imgfile)
+
+        hidefileName = secure_filename(hidefile.filename)
+        imgfileName = "1"+secure_filename(imgfile.filename)
+        #print(hidefileName, imgfileName)
+
         
         # -------save both the files--------
-        hidefile.save(f"uploads/{secure_filename(hidefile.filename)}")
-        imgfile.save(f"uploads/{secure_filename(imgfile.filename)}")
+        hidefile.save(f"uploads/{hidefileName}")
+        imgfile.save(f"uploads/{imgfileName}")
         # --------files saved------------
 
         # ------getting the file extension------
-        split_tup = os.path.splitext("uploads/"+secure_filename(hidefile.filename)) 
+        split_tup = os.path.splitext("uploads/"+hidefileName) 
         ext = split_tup[1]
         # ---getting the file size----
         if(ext == '.txt'):
-            txt = open("uploads/"+secure_filename(hidefile.filename), "r")
+            txt = open("uploads/"+hidefileName, "r")
             file_size = len(txt.read()+"\0")
             txt.close()
         else:
-            file_size = os.path.getsize("uploads/"+secure_filename(hidefile.filename))
+            file_size = os.path.getsize("uploads/"+hidefileName)
 
         # ------ sending the files and and info to steg.py -----
-        steg.K("uploads/"+secure_filename(hidefile.filename), "uploads/"+secure_filename(imgfile.filename), ext, file_size)
+        steg.K("uploads/"+hidefileName, "uploads/"+imgfileName, ext, file_size)
 
         # -------- deleting the recieved files --------
-        os.remove("uploads/"+secure_filename(hidefile.filename))
-        os.remove("uploads/"+secure_filename(imgfile.filename))
+        os.remove("uploads/"+hidefileName)
+        os.remove("uploads/"+imgfileName)
         
 
         # ----- sending hidden.png back to user / if error send 404 ------
@@ -73,15 +77,17 @@ def unhidepage():
         print("unhide")
         imgfile = request.files["img"]  #get the image file to unhide from
 
+        imgfileName = secure_filename(imgfile.filename)
+
         # -------save both the files--------
-        imgfile.save(f"uploads/{secure_filename(imgfile.filename)}")
+        imgfile.save(f"uploads/{imgfileName}")
         # --------files saved------------
 
         # ------sending the image to steg.py and getting the file extension in return ------
-        ext = steg.L("uploads/"+secure_filename(imgfile.filename))
+        ext = steg.L("uploads/"+imgfileName)
 
         # -------- deleting the recieved files --------
-        os.remove("uploads/"+secure_filename(imgfile.filename))
+        os.remove("uploads/"+imgfileName)
 
         # ----- sending hidden.png back to user / if error send 404 ------
         try:

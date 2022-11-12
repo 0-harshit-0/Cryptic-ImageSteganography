@@ -105,7 +105,6 @@
 		}
 
 		header {
-			height: 10%;
 		}
 		.headingCont {
 			display: flex;
@@ -118,7 +117,6 @@
 
 		.wrap {
 			margin-block-start: 3%;
-			height: 30%;
 		}
 		.wrap > section {
 			height: 100%;
@@ -132,16 +130,14 @@
 		}
 		input {
 			margin-block-start: 10px;
+			width: min-content;
 		}
 
 		footer {
 			position: relative;
-			height: 51%;
+			height: min-content;
 		}
 		.footCont {
-			position: absolute;
-			top: calc(100% - 10%);
-
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -175,31 +171,48 @@
 			reqS.innerText = `\nrequired image of dimension ${find(e.target.files[0].size)} or above`;
 		});
 
-		let hide = async () => {
-			let formData = new FormData();
-			formData.append('hide', hideFiles.files[0]);
-			formData.append('img', imageFile.files[0]);
-			hideFiles.value = '', imageFile.value = '';
 
-			let res = await fetch("/hide", {
-				method: 'post',
+		function download(file, filename) {
+			const fileUrl = URL.createObjectURL(file);
+			let a = document.createElement('a');
+			a.setAttribute("download", filename);
+			a.setAttribute("href", fileUrl);
+			a.click();
+			a.remove();
+		}
+		async function fileSendRequest(requestURL, bodyData) {
+			let res = await fetch(requestURL, {
+				method: "post",
 				headers: {
 					//'Content-Type': 'application/json'
 					'enctype': "multipart/form-data"
 				},
-				body: formData
+				body: bodyData
 			});
 
-			if(res.status == 404) return 0;
+			// if response is an error, exit the process
+			if(res.status == 404) {
+				reqS.innerText = "\nhmmm.. there was some error, make sure image size is correct or change the filenames or contact me on github ;P";
+				return 0;
+			}
+			return res;
+		}
+
+		
+		let hide = async () => {
+			let formData = new FormData();
+			formData.append('hide', hideFiles.files[0]);
+			formData.append('img', imageFile.files[0]);
+
+			hideFiles.value = '', imageFile.value = '';
+
+			let res = await fileSendRequest("/hide", formData);
+			if (!res) return 1;
+
 			let json = await res.blob();
 			res = await fetch("/hide");
 
-			const imageObjectURL = URL.createObjectURL(json);
-			let a = document.createElement('a');
-			a.setAttribute("download", "hidden.png");
-			a.setAttribute("href", imageObjectURL);
-			a.click();
-			a.remove();
+			download(json, "hidden.png");
 		}
 
 		let unnhide = async ()=> {
@@ -207,26 +220,14 @@
 			formData.append('img', imageFiled.files[0]);
 			imageFiled.value = '';
 
-			let res = await fetch("/unhide", {
-				method: 'post',
-				headers: {
-					//'Content-Type': 'application/json'
-					'enctype': "multipart/form-data"
-				},
-				body: formData
-			});
-			if(res.status == 404) return 0;
+			let res = await fileSendRequest("/unhide", formData);
+			if (!res) return 1;
 
 			let json = await res.blob();
 			res = await fetch("/unhide");
 			let ext = await res.text();
 
-			const imageObjectURL = URL.createObjectURL(json);
-			let a = document.createElement('a');
-			a.setAttribute("download", "decoded"+ext);
-			a.setAttribute("href", imageObjectURL);
-			a.click();
-			a.remove();
+			download(json, "decoded"+ext);
 		}
 	</script>
 </body>

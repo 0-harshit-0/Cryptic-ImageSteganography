@@ -1,19 +1,24 @@
+//register service worker
 if ('serviceWorker' in navigator) {
    navigator.serviceWorker.register("static/serviceworker.js", { scope: "/" });
 }
 
+// variable
 let boxCount = 0, animateStore = new Array();
 let imageFile = document.querySelector('#image');
 let hideFiles = document.querySelector('#hidefile');
 let encoding = false, encodemsg= false;
 let createdImageFile;
+var requestTerminal, responseText;
 
+// make the first terminal on site load
 window.onload = () => {
 	setTimeout(()=> {
 		new Terminal(`Cryptic_${boxCount++}`).drawMiniBox();
 		
 	}, 1000);
 }
+
 /* ---------------key short cuts---------------- */
 addEventListener('keydown', (e)=>{
 	let key = e.key;
@@ -22,7 +27,7 @@ addEventListener('keydown', (e)=>{
 	}
 });
 
-/* -----------------create image----------------- */
+/* -----------------create image (incomplete) ----------------- */
 let canvas = document.querySelector("#encodedCan");
 let ctx = canvas.getContext("2d");
 
@@ -56,82 +61,112 @@ function createImage(self, size) {
     a.remove();
 }
 
-/* ------------------file read--------------------*/
-let hide = async (requestTerminal)=> {
+/* ------------------file read/hide/unhide/downlaod--------------------*/
+
+function download(file, filename) {
+	const fileUrl = URL.createObjectURL(file);
+	let a = document.createElement('a');
+	a.setAttribute("download", filename);
+	a.setAttribute("href", fileUrl);
+	a.click();
+	a.remove();
+}
+async function fileSendRequest(requestURL, bodyData) {
+	let res = await fetch(requestURL, {
+		method: "post",
+		headers: {
+			//'Content-Type': 'application/json'
+			'enctype': "multipart/form-data"
+		},
+		body: bodyData
+	});
+
+	// if response is an error, exit the process
+	if(res.status == 404) {
+		responseText.value += 'hmmm.. there was some error, make sure image size is correct or change the filenames or contact me on github ;P';
+		responseText.innerHTML = responseText.value;
+		responseText.style.height = (responseText.scrollHeight)+"px";
+		
+		// move input to next line
+		requestTerminal.commandInput();
+		return 0;
+	}
+	
+	// move input to next line
+	requestTerminal.commandInput();
+	return res;
+}
+
+let hide = async ()=> {
 	let formData = new FormData();
+
+	// if user want to hide text message instead of a file :: encodemsg === true
+	// encodemsg is just another txt file but refrencing it as a text message
 	if(!encodemsg) {
 		formData.append('hide', hideFiles.files[0]);
 	}else{
 		formData.append('hide', encodemsg);
 	}
+
+	// if user gives his own image else create a new image and use it
 	if(imageFile.files[0]) {
 		formData.append('img', imageFile.files[0]);
 	}else {
 		formData.append('img', createdImageFile);
 	}
-	hideFiles.value = '', imageFile.value = '';
 
-	let res = await fetch("/hide", {
-		method: 'post',
-		headers: {
-			//'Content-Type': 'application/json'
-			'enctype': "multipart/form-data"
-		},
-		body: formData
-	});
-	requestTerminal.commandInput();
+	// reset the file input fields and variables
+	hideFiles.value = '', imageFile.value = '', encoding = false, encodemsg = false;
 
-	if(res.status == 404) return 0;
-	let json = await res.blob();
+	// send the files to the server
+	let res = await fileSendRequest("/hide", formData);
+	if (!res) return 1;
+
+	// get the image file and send a "get" request to server to as ack and delete the file
+	let hiddenImgFile = await res.blob();
 	res = await fetch("/hide");
 
-	const imageObjectURL = URL.createObjectURL(json);
-	let a = document.createElement('a');
-	a.setAttribute("download", "hidden.png");
-	a.setAttribute("href", imageObjectURL);
-	a.click();
-	a.remove();
-	encoding = false;
-	encodemsg = false;
+	// download the image file
+	download(hiddenImgFile, "hidden.png");
 }
 
-let unnhide = async (requestTerminal)=> {
+let unnhide = async ()=> {
 	let formData = new FormData();
+
+	// append the "hidden" img file
 	formData.append('img', imageFile.files[0]);
+
+	// reset the img input field
 	imageFile.value = '';
 
-	let res = await fetch("/unhide", {
-		method: 'post',
-		headers: {
-			//'Content-Type': 'application/json'
-			'enctype': "multipart/form-data"
-		},
-		body: formData
-	});
-	requestTerminal.commandInput();
-	if(res.status == 404) return 0;
+	// send the file to server
+	let res = await fileSendRequest("/unhide", formData);
+	if (!res) return 1;
 
-	let json = await res.blob();
+	// store response from server
+	let hiddenFile = await res.blob();
+
+	// get the image file and send a "get" request to server to get the extension and delete the file
 	res = await fetch("/unhide");
 	let ext = await res.text();
 
-	const imageObjectURL = URL.createObjectURL(json);
-	let a = document.createElement('a');
-	a.setAttribute("download", "decoded"+ext);
-	a.setAttribute("href", imageObjectURL);
-	a.click();
-	a.remove();
+	// download the file
+	download(hiddenFile, "decoded"+ext);
 }
-var tmp;
-function startProcess(r) {
-	tmp = r;
+
+
+function startProcess(r, bufferText) {
+	requestTerminal = r;
+	responseText = bufferText;
 	imageFile.click();
 }
 imageFile.addEventListener('change', (e) => {
 	if(!imageFile.files.length) return 0;
+
+	// if it's an encoding or decoding command
 	if(encoding) {
-		hide(tmp);
+		hide();
 	}else{
-		unnhide(tmp);
+		unnhide();
 	}
 });

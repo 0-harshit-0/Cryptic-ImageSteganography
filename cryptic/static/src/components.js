@@ -190,7 +190,7 @@ class Terminal {
 							iele.innerHTML = iele.value;
 							iele.style.height = (iele.scrollHeight)+"px";
 						}, 100);
-						startProcess(this);
+						startProcess(this, iele);
 						break;
 					case 'n':
 						if(!encoding) return 0;
@@ -211,7 +211,7 @@ class Terminal {
 							iele.innerHTML = iele.value;
 							iele.style.height = (iele.scrollHeight)+"px";
 						}, 100);
-						startProcess(this);
+						startProcess(this, iele);
 						break;
 					default:
 						iele.value += `\ninvalid flag, try this: "Cryptic -h"`;
