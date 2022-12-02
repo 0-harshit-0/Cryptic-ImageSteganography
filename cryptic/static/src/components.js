@@ -99,14 +99,17 @@ class Terminal {
 		let newCommandTextarea = commandTextareaList.pop();
 		newCommandTextarea.value = `root@${this.n.toLowerCase()}:~# ${input}`;
 		
-		setTimeout(()=>{newCommandTextarea.focus();}, 100);
-		if (commandTextareaList.length) {
-			commandTextareaList[commandTextareaList.length-1].disabled = true;
-		}
-		
 		newCommandTextarea.addEventListener('input', ()=> {
 			newCommandTextarea.style.height = (newCommandTextarea.scrollHeight)+"px";
 		});
+
+		setTimeout(()=>{newCommandTextarea.focus();}, 100);
+
+		//disable other inputs
+		if (commandTextareaList.length) {
+			commandTextareaList[commandTextareaList.length-1].disabled = true;
+			commandTextareaList[commandTextareaList.length-1].removeEventListener('input', ()=> {});
+		}
 	}
 	input(file, img) {
 		let arrowCount = 0, dimension = 0;
@@ -123,7 +126,6 @@ class Terminal {
 			}else if(e.key == 'Enter'){
 				arrowCount = 0;
 				let iele = [...this.div.querySelectorAll(`.commandName`)].pop();
-				iele.removeEventListener('input', ()=> {});
 
 				let temp;
 				if(iele.value.indexOf("(y/n):")>0) {
@@ -133,6 +135,7 @@ class Terminal {
 				}
 				let command = temp.split(' ').splice(1);
 				this.historyCommand.unshift(command.join(' '));
+
 				//command filter---------
 				temp = command.shift();
 				if (temp == 'exit') {
@@ -172,7 +175,10 @@ class Terminal {
 						});
 						encodemsg = new File([myblob], "mess.txt");
 						dimension = find(encodemsg.size);
-						setTimeout(()=> {iele.value += `Would you like to insert image of dimension (${dimension}) or higher? (y/n): `;}, 100);
+						setTimeout(()=> {
+							iele.value += `Would you like to insert image of dimension (${dimension}) or higher? (y/n): `;
+							iele.style.height = (iele.scrollHeight)+"px";
+						}, 100);
 						break;
 					case '-e':
 						encoding = true;
@@ -180,6 +186,7 @@ class Terminal {
 						file.addEventListener("change", ()=> {
 							dimension = find(file.files[0].size);
 							iele.value += `Would you like to insert image of dimension (${dimension}) or higher? (y/n): `;
+							iele.style.height = (iele.scrollHeight)+"px";
 						});
 						break;
 					case 'y':
