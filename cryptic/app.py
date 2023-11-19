@@ -17,7 +17,7 @@ def grphicalInterface():
 
 @app.route("/static/serviceworker.js")
 def sw():
-    response=make_response(send_from_directory('static', 'serviceworker.js'))
+    response = make_response(send_from_directory('static', 'serviceworker.js'))
     #change the content header file. Can also omit; flask will handle correctly.
     response.headers['Service-Worker-Allowed'] = '/'
     return response

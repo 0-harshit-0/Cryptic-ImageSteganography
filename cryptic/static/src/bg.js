@@ -1,4 +1,4 @@
-let ss = document.querySelector('#startScreen');
+let startScreenDiv = document.querySelector('#startScreen');
 let ssTxt = document.querySelector("#startScreen span");
 let blink = document.querySelector(".blink");
 let txt = "cryptic", i=0;
@@ -20,7 +20,7 @@ ssTxt.onclick = () =>{
 	}, 150);
 
 	setTimeout(()=>{
-		ss.remove();
+		startScreenDiv.remove();
 	}, 1500);
 }
 
@@ -32,7 +32,7 @@ ssTxt.onclick = () =>{
 let bgcanvas = document.querySelector('#canvas');
 let bgctx = bgcanvas.getContext('2d');
 
-let s = new Shapes(bgctx), timeout = false;
+let s = new Shapes({canvas: bgcanvas, context: bgcanvas.getContext('2d')}), timeout = false;
 let animateInter, store = new Array(), index = 0;
 let scale = 1;
 
@@ -52,7 +52,7 @@ addEventListener('resize', function(e) {
 		changeDimensions(animatio);
 	}, 500);
 });
-// bgcanvas responssive over------------
+// bgcanvas responsive over ----------
 
 class Stars {
   constructor(x, y, vx, vy, radius) {
@@ -62,8 +62,8 @@ class Stars {
     this.color = "rgb(255, 255, 255)";
   }
   draw() {
-    s.ellipse("",this.pos.x, this.pos.y, this.r);
-    s.fill("", this.color);
+    s.ellipse({x: this.pos.x, y: this.pos.y, r: this.r});
+    s.fill({color: this.color});
   }
   update() {
     this.pos = Vector2D.add(this.pos, this.vel);

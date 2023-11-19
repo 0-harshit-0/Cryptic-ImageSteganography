@@ -31,35 +31,35 @@ addEventListener('keydown', (e)=>{
 let canvas = document.querySelector("#encodedCan");
 let ctx = canvas.getContext("2d");
 
-function sumDigits(n) {
-	if (n < 10) return n
-	return sumDigits(n % 10 + sumDigits(Math.floor(n / 10)));
-}
+// function sumDigits(n) {
+// 	if (n < 10) return n
+// 	return sumDigits(n % 10 + sumDigits(Math.floor(n / 10)));
+// }
 
-function createImage(self, size) {
-	let sizes = size.split("x").map(z=> parseInt(z));
-	const arr = new Uint8ClampedArray(4*sizes[0]*sizes[1]);
-	for (let i = 0; i < arr.length; i += 4) {
-		arr[i + 0] = 255;    // R value
-		arr[i + 1] = 255;    // G value
-		arr[i + 2] = 255;    // B value
-		arr[i + 3] = 255;    // A value
-	}
+// function createImage(self, size) {
+// 	let sizes = size.split("x").map(z=> parseInt(z));
+// 	const arr = new Uint8ClampedArray(4*sizes[0]*sizes[1]);
+// 	for (let i = 0; i < arr.length; i += 4) {
+// 		arr[i + 0] = 255;    // R value
+// 		arr[i + 1] = 255;    // G value
+// 		arr[i + 2] = 255;    // B value
+// 		arr[i + 3] = 255;    // A value
+// 	}
 
-	ctx.putImageData(new ImageData(arr, sizes[0], sizes[1]), 0, 0);
-	canvas.toBlob(async (blob) => {
-		let temparr = await blob.arrayBuffer();
-		const typedArray = new Uint8Array(temparr);
-		createdImageFile = new File([...arr], "createdImage.png", {type:"image/png"});
-		//console.log(createdImageFile)
-		hide(self);
-	});
-	let a = document.createElement('a');
-	a.href = canvas.toDataURL("image/png");
-	a.setAttribute("download", "download");
-    a.click();
-    a.remove();
-}
+// 	ctx.putImageData(new ImageData(arr, sizes[0], sizes[1]), 0, 0);
+// 	canvas.toBlob(async (blob) => {
+// 		let temparr = await blob.arrayBuffer();
+// 		const typedArray = new Uint8Array(temparr);
+// 		createdImageFile = new File([...arr], "createdImage.png", {type:"image/png"});
+// 		//console.log(createdImageFile)
+// 		hide(self);
+// 	});
+// 	let a = document.createElement('a');
+// 	a.href = canvas.toDataURL("image/png");
+// 	a.setAttribute("download", "download");
+// 	a.click();
+// 	a.remove();
+// }
 
 /* ------------------file read/hide/unhide/downlaod--------------------*/
 
